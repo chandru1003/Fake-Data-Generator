@@ -1,27 +1,23 @@
 import os
 import pandas as pd
-from faker import Faker
+import requests
 
 def generate_custom_fake_data(columns, rows):
-    fake = Faker()
-    data = {column: [] for column in columns}
+    # Convert user-input columns into custom field parameters
+    custom_fields = '&'.join(f'customfield{i + 1}={column}' for i, column in enumerate(columns))
 
-    for _ in range(rows):
-        for column in columns:
-            if "name" in column.lower():
-                data[column].append(fake.name())
-            elif "email" in column.lower():
-                data[column].append(fake.email())
-            elif "country" in column.lower():
-                data[column].append(fake.country())
-            elif "address" in column.lower():
-                data[column].append(fake.address())
-            elif "date_of_birth" in column.lower():
-                data[column].append(fake.date_of_birth(minimum_age=18, maximum_age=65).strftime('%Y-%m-%d'))            
-            else:
-                print(f"Invalid column name: {column}")
+    # Construct the URL
+    url = f'https://fakerapi.it/api/v1/custom?_quantity={rows}&{custom_fields}'
 
-    return pd.DataFrame(data)
+    # Send the request to the Faker API
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        return pd.DataFrame(data['data'])
+    else:
+        print(f"Failed to fetch fake data. Status code: {response.status_code}")
+        return None
 
 def save_to_file(dataframe, filename, file_format):
     output_folder = "output"
@@ -44,8 +40,7 @@ def save_to_file(dataframe, filename, file_format):
 
 def main():
     # User input
-    columns_input=[]
-    columns_input = input("Enter column names (comma-separated): ").split(",")
+    columns_input = input("Enter column names (comma-separated): ").lower().split(",")
     rows_input = int(input("Enter the number of rows: "))
     filename_input = input("Enter the filename (without extension): ")
     file_format_input = input("Enter the file format (csv, xlsx, json): ").lower()
@@ -53,7 +48,7 @@ def main():
     # Generate custom fake data
     custom_fake_data = generate_custom_fake_data(columns_input, rows_input)
 
-    # Save to CSV file
+    # Save to file
     if custom_fake_data is not None:
         save_to_file(custom_fake_data, filename_input, file_format_input)
 
