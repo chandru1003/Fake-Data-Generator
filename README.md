@@ -1,2 +1,22 @@
-# Fake-Data-Generator
-A simple Python script to generate fake data based on user-specified column names.  ## Usage
+# Custom Fake Data Generator with Faker API
+
+
+This Python script allows you to generate custom fake data using the Faker API. Users can specify the columns they need, the number of rows, and the desired file format. It uses columns as specified in the [Faker API custom section](https://fakerapi.it/en).
+## Features
+
+- **Generate Custom Fake Data:** Users can input a list of column names, the number of rows, and the script will generate custom fake data using the Faker API.
+
+- **Multiple File Formats:** Generated data can be saved in different file formats such as CSV, XLSX, or JSON.
+
+## Prerequisites
+
+- Python 3.x
+- Required Python packages: `pandas`, `requests`, `faker`
+
+## Usage
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/fake-data-generator.git
+   cd fake-data-generator
