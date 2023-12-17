@@ -39,7 +39,7 @@ def save_to_file(dataframe, filename, file_format):
 
 def main():
     # User input
-    api_key_input = "ead93110"
+    api_key_input = "<api_key_input>"
     while True:
         # User input for fields
         fields_input = []
