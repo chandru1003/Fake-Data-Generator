@@ -1,4 +1,4 @@
-# Custom Fake Data Generator with Faker API
+# Fake Data Generator 
 
 
 This Python script allows you to generate custom fake data using the Mockaroo API. Users can specify the columns they need, the number of rows, and the desired file format. It uses columns as specified in the [Mockaroo API](https://www.mockaroo.com/) website. 

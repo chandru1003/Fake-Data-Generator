@@ -39,39 +39,43 @@ def save_to_file(dataframe, filename, file_format):
 
 def main():
     # User input
-    api_key_input = "<apiKey>"
-
-    # User input for fields
-    fields_input = []
+    api_key_input = "ead93110"
     while True:
-        field_name = input("Enter column name (or type 'done' to finish): ")
-        if field_name.lower() == 'done':
+        # User input for fields
+        fields_input = []
+        while True:
+            field_name = input("Enter column name (or type 'done' to finish): ")
+            if field_name.lower() == 'done':
+                break
+
+            field_type = input("Enter data type: ")
+            field = {"name": field_name, "type": field_type}
+
+            # Additional parameters based on data type
+            if field_type == 'Custom List':
+                values = input("Enter values (comma-separated): ").split(",")
+                field["values"] = values
+
+            fields_input.append(field)  # This line should be inside the while loop
+
+        rows_input = int(input("Enter the number of rows: "))
+        filename_input = input("Enter the filename (without extension): ")
+        file_format_input = input("Enter the file format (csv, xlsx, json): ").lower()
+
+        # Generate JSON representation of fields
+        fields_json = json.dumps(fields_input)
+
+        # Generate custom fake data
+        custom_fake_data = generate_custom_fake_data(api_key_input, fields_json, rows_input, file_format_input)
+
+        # Save to file
+        if custom_fake_data is not None:
+            save_to_file(custom_fake_data, filename_input, file_format_input)
+
+        retry = input("Do you want to generate fake data again? (yes/no): ").lower()
+        if retry != 'yes':
             break
 
-        field_type = input("Enter data type: ")
-        field = {"name": field_name, "type": field_type}
-
-        # Additional parameters based on data type
-        if field_type == 'Custom List':
-            values = input("Enter values (comma-separated): ").split(",")
-            field["values"] = values
-
-        fields_input.append(field)  # This line should be inside the while loop
-
-    
-    rows_input = int(input("Enter the number of rows: "))
-    filename_input = input("Enter the filename (without extension): ")
-    file_format_input = input("Enter the file format (csv, xlsx, json): ").lower()
-
-    # Generate JSON representation of fields
-    fields_json = json.dumps(fields_input)
-
-    # Generate custom fake data
-    custom_fake_data = generate_custom_fake_data(api_key_input, fields_json, rows_input, file_format_input)
-
-    # Save to file
-    if custom_fake_data is not None:
-        save_to_file(custom_fake_data, filename_input, file_format_input)
 
 if __name__ == "__main__":
     main()
