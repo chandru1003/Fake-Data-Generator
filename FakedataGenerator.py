@@ -1,20 +1,19 @@
 import os
+import json
 import pandas as pd
 import requests
 
-def generate_custom_fake_data(columns, rows):
-    # Convert user-input columns into custom field parameters
-    custom_fields = '&'.join(f'customfield{i + 1}={column}' for i, column in enumerate(columns))
+def generate_custom_fake_data(api_key, fields, rows, file_format):
+    # Construct the Mockaroo API URL
+    url = f'https://api.mockaroo.com/api/generate.json?key={api_key}'
+            
 
-    # Construct the URL
-    url = f'https://fakerapi.it/api/v1/custom?_quantity={rows}&{custom_fields}'
-
-    # Send the request to the Faker API
-    response = requests.get(url)
+    # Send the request to the Mockaroo API
+    response = requests.post(url, json={'fields': fields, 'count': rows})
 
     if response.status_code == 200:
         data = response.json()
-        return pd.DataFrame(data['data'])
+        return pd.DataFrame(data)
     else:
         print(f"Failed to fetch fake data. Status code: {response.status_code}")
         return None
@@ -40,13 +39,35 @@ def save_to_file(dataframe, filename, file_format):
 
 def main():
     # User input
-    columns_input = input("Enter column names (comma-separated): ").lower().split(",")
+    api_key_input = "<apiKey>"
+
+    # User input for fields
+    fields_input = []
+    while True:
+        field_name = input("Enter column name (or type 'done' to finish): ")
+        if field_name.lower() == 'done':
+            break
+
+        field_type = input("Enter data type: ")
+        field = {"name": field_name, "type": field_type}
+
+        # Additional parameters based on data type
+        if field_type == 'Custom List':
+            values = input("Enter values (comma-separated): ").split(",")
+            field["values"] = values
+
+        fields_input.append(field)  # This line should be inside the while loop
+
+    
     rows_input = int(input("Enter the number of rows: "))
     filename_input = input("Enter the filename (without extension): ")
     file_format_input = input("Enter the file format (csv, xlsx, json): ").lower()
 
+    # Generate JSON representation of fields
+    fields_json = json.dumps(fields_input)
+
     # Generate custom fake data
-    custom_fake_data = generate_custom_fake_data(columns_input, rows_input)
+    custom_fake_data = generate_custom_fake_data(api_key_input, fields_json, rows_input, file_format_input)
 
     # Save to file
     if custom_fake_data is not None:

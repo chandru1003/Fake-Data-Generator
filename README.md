@@ -18,5 +18,4 @@ This Python script allows you to generate custom fake data using the Faker API. 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/chandru1003/Fake-Data-Generator.git
-   
+   git clone https://github.com/chandru1003/Fake-Data-Generator.git  
