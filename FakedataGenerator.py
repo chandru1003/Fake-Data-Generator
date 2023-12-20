@@ -7,7 +7,7 @@ def generate_custom_fake_data(api_key, fields, rows, file_format):
     # Construct the Mockaroo API URL
     url = f'https://api.mockaroo.com/api/generate.json?key={api_key}'
             
-
+            
     # Send the request to the Mockaroo API
     response = requests.post(url, json={'fields': fields, 'count': rows})
 
@@ -39,7 +39,7 @@ def save_to_file(dataframe, filename, file_format):
 
 def main():
     # User input
-    api_key_input = "<api_key_input>"
+    api_key_input = "<API key>"
     while True:
         # User input for fields
         fields_input = []
